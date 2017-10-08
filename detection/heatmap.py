@@ -1,10 +1,7 @@
-
-import matplotlib.pyplot as plt
 import numpy as np
-import cv2
-from scipy.ndimage.measurements import label
+import matplotlib.pyplot as plt
 
-
+from detection.lesson_functions import draw_boxes
 
 
 def add_heat(heatmap, bbox_list):
@@ -25,8 +22,8 @@ def apply_threshold(heatmap, threshold):
     return heatmap
 
 
-def draw_labeled_bboxes(img, labels):
-    # Iterate through all detected cars
+def get_bboxes(labels):
+    bboxes = []
     for car_number in range(1, labels[1] + 1):
         # Find pixels with each car_number label value
         nonzero = (labels[0] == car_number).nonzero()
@@ -34,11 +31,15 @@ def draw_labeled_bboxes(img, labels):
         nonzeroy = np.array(nonzero[0])
         nonzerox = np.array(nonzero[1])
         # Define a bounding box based on min/max x and y
-        bbox = ((np.min(nonzerox), np.min(nonzeroy)), (np.max(nonzerox), np.max(nonzeroy)))
-        # Draw the box on the image
-        cv2.rectangle(img, bbox[0], bbox[1], (0, 0, 255), 6)
-    # Return the image
-    return img
+        bboxes.append(
+            ((np.min(nonzerox), np.min(nonzeroy)), (np.max(nonzerox), np.max(nonzeroy)))
+        )
+    return bboxes
+
+
+def draw_labeled_bboxes(img, labels):
+    # Iterate through all detected cars
+    return draw_boxes(img, get_bboxes(labels))
 
 
 def get_heatmap(box_list, image, threshold=1):
@@ -56,19 +57,3 @@ def get_heatmap(box_list, image, threshold=1):
     # Visualize the heatmap when displaying
     heatmap = np.clip(heat, 0, 255)
     return heatmap
-
-def draw_heat(image, heatmap, debug=False):
-    # Find final boxes from heatmap using label function
-    labels = label(heatmap)
-    draw_img = draw_labeled_bboxes(np.copy(image), labels)
-    if not debug:
-        return draw_img
-
-    fig = plt.figure()
-    plt.subplot(121)
-    plt.imshow(draw_img)
-    plt.title('Car Positions')
-    plt.subplot(122)
-    plt.imshow(heatmap, cmap='hot')
-    plt.title('Heat Map')
-    fig.tight_layout()
