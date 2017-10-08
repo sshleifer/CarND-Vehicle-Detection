@@ -1,7 +1,6 @@
-import matplotlib.image as mpimg
+
 import matplotlib.pyplot as plt
 import numpy as np
-import pickle
 import cv2
 from scipy.ndimage.measurements import label
 
@@ -42,24 +41,28 @@ def draw_labeled_bboxes(img, labels):
     return img
 
 
-def draw_heat(box_list, image):
+def get_heatmap(box_list, image, threshold=1):
     '''Read in a pickle file with bboxes saved
-        Each item in the "all_bboxes" list will contain a
-        list of boxes for one of the images shown above
+    Args:
+        box_list: []
     '''
     heat = np.zeros_like(image[:, :, 0]).astype(np.float)
     # Add heat to each box in box list
     heat = add_heat(heat, box_list)
 
     # Apply threshold to help remove false positives
-    heat = apply_threshold(heat, 1)
+    heat = apply_threshold(heat, threshold)
 
     # Visualize the heatmap when displaying
     heatmap = np.clip(heat, 0, 255)
+    return heatmap
 
+def draw_heat(image, heatmap, debug=False):
     # Find final boxes from heatmap using label function
     labels = label(heatmap)
     draw_img = draw_labeled_bboxes(np.copy(image), labels)
+    if not debug:
+        return draw_img
 
     fig = plt.figure()
     plt.subplot(121)

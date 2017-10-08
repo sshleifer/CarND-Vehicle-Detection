@@ -1,9 +1,30 @@
 import numpy as np
 
-# Define a function that takes an image,
-# start and stop positions in both x and y,
-# window size (x and y dimensions),
-# and overlap fraction (for both x and y)
+
+def make_many_windows(image):
+    windows = slide_window(image, x_start_stop=[500, None], y_start_stop=[400, 560],
+                           xy_window=(64, 64), xy_overlap=(0.0, 0.0))
+
+    y_start_stop = [400, 680]  # Min and max in y to search in slide_window()
+    x_start_stop = [500, None]  # Min and max in y to search in slide_window()
+
+    windows2 = slide_window(image, x_start_stop=x_start_stop, y_start_stop=y_start_stop,
+                            xy_window=(92, 74), xy_overlap=(0.25, 0.25))
+
+    windows3 = slide_window(image, x_start_stop=x_start_stop, y_start_stop=y_start_stop,
+                            xy_window=(120, 84), xy_overlap=(0.5, 0.5),)
+
+    windows4 = slide_window(image, x_start_stop=x_start_stop, y_start_stop=y_start_stop,
+                            xy_window=(148, 94), xy_overlap=(0.5, 0.5))
+
+    windows5 = slide_window(image, x_start_stop=x_start_stop, y_start_stop=y_start_stop,
+                            xy_window=(176, 104), xy_overlap=(0.5, 0.5))
+
+    windows6 = slide_window(image, x_start_stop=x_start_stop, y_start_stop=y_start_stop,
+                            xy_window=(204, 114), xy_overlap=(0.5, 0.5))
+    return windows + windows2 + windows3 + windows4 + windows5 + windows6
+
+
 def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None],
                     xy_window=(64, 64), xy_overlap=(0.5, 0.5)):
     # If x and/or y start/stop positions not defined, set to image size

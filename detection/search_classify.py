@@ -5,7 +5,7 @@ import cv2
 # Define a function to extract features from a single image window
 # This function is very similar to extract_features()
 # just for a single image rather than list of images
-def single_img_features(img, color_space='RGB', spatial_size=(16, 16),
+def single_img_features(img, color_space='RGB', spatial_size=(32, 32),
                         hist_bins=32, orient=9,
                         pix_per_cell=8, cell_per_block=2, hog_channel=0):
 
@@ -31,13 +31,13 @@ def single_img_features(img, color_space='RGB', spatial_size=(16, 16),
     return np.concatenate([spatial_features, hist_features, hog_features])
 
 
-
+# Define a function you will pass an image
+# and the list of windows to be searched (output of slide_windows())
 def search_windows(img, windows, clf, color_space='RGB',
                    spatial_size=(32, 32), hist_bins=32, orient=9,
                    pix_per_cell=8, cell_per_block=2,
                    hog_channel=0, spatial_feat=True,
                    hist_feat=True, hog_feat=True):
-    '''make features and predict on each window'''
     # 1) Create an empty list to receive positive detection windows
     on_windows = []
     # 2) Iterate over all windows in the list

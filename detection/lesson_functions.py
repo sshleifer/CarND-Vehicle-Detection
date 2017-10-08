@@ -77,6 +77,7 @@ def extract_features(imgs, color_space='RGB', spatial_size=(32, 32),
                      hist_bins=32, orient=9,
                      pix_per_cell=8, cell_per_block=2, hog_channel=0,
                      spatial_feat=True, hist_feat=True, hog_feat=True):
+    raise NotImplementedError
     # Create a list to append feature vectors to
     features = []
     # Iterate through the list of images
@@ -131,7 +132,7 @@ def extract_features(imgs, color_space='RGB', spatial_size=(32, 32),
 # window size (x and y dimensions),
 # and overlap fraction (for both x and y)
 def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None],
-                 xy_window=(64, 64), xy_overlap=(0.5, 0.5)):
+                 xy_window=(64, 64), xy_overlap=(0.5, 0.5), add_to=None):
     # If x and/or y start/stop positions not defined, set to image size
     if x_start_stop[0] == None:
         x_start_stop[0] = 0
@@ -169,7 +170,10 @@ def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None],
             # Append window position to list
             window_list.append(((startx, starty), (endx, endy)))
     # Return the list of windows
-    return window_list
+    if add_to is None:
+        return window_list
+    else:
+        return add_to.extend(window_list)
 
 
 # Define a function to draw bounding boxes
