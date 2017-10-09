@@ -65,8 +65,7 @@ I also sneakily retrain on the full dataset after fitting on just the train data
 ![alt text][image3]
 
 ####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
-
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+Most performance optimization was by changing the arguments to `single_image_feature`
 
 ![alt text][image4]
 ---
