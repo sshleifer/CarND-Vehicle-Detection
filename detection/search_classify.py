@@ -36,10 +36,11 @@ def single_img_features(img, color_space='RGB', spatial_size=(32, 32),
 def search_windows(img, windows, clf, color_space='RGB',
                    spatial_size=(32, 32), hist_bins=32, orient=9,
                    pix_per_cell=8, cell_per_block=2,
-                   hog_channel=0, spatial_feat=True,
-                   hist_feat=True, hog_feat=True):
+                   hog_channel=0, feature_lst = []):
     # 1) Create an empty list to receive positive detection windows
     on_windows = []
+    feature_lst = []
+    img_list = []
     # 2) Iterate over all windows in the list
     for window in windows:
         # 3) Extract the test window from original image
@@ -51,11 +52,17 @@ def search_windows(img, windows, clf, color_space='RGB',
                                        orient=orient, pix_per_cell=pix_per_cell,
                                        cell_per_block=cell_per_block,
                                        hog_channel=hog_channel)
+        #feature_lst.append(features)
         # 6) Predict using your classifier
 
-        prediction = clf.predict(features.reshape(1,-1))
+        prediction = clf.predict_proba(features.reshape(1, -1))[0][1]
         # 7) If positive (prediction == 1) then save the window
-        if prediction == 1:
+        #print(prediction)
+        if prediction >= .5:
+            feature_lst.append(features)
+            img_list.append(test_img)
+
+            # print(prediction)
             on_windows.append(window)
     # 8) Return windows for positive detections
-    return on_windows
+    return on_windows, feature_lst, img_list

@@ -14,7 +14,7 @@ from tqdm import tqdm
 def process_image(image, clf,  threshold=1, search_params=PARAMS):
     windows = make_many_windows(image)#slide_window(image, y_start_stop=[ystart, ystop])
 
-    hot_windows = search_windows(image, windows, clf, **search_params)
+    hot_windows, _, __ = search_windows(image, windows, clf, **search_params)
     heatmap = get_heatmap(hot_windows, image, threshold=threshold)
     # window_img = draw_boxes(image, hot_windows, color=(0, 0, 255), thick=6)
     return draw_heat(image, heatmap)
@@ -24,9 +24,13 @@ def video_pipeline(clip, clf, threshold=1, search_params=PARAMS):
     last_hot_windows = []
     imgs = []
     heatmaps = []
+    feats = []
+    wins = []
     for i, image in tqdm(enumerate(clip.iter_frames())):
         windows = make_many_windows(image)
-        hot_windows = search_windows(image, windows, clf, **search_params)
+        hot_windows, f, img = search_windows(image, windows, clf, **search_params)
+        feats.extend(f)
+        wins.extend(img)
         heatmap = get_heatmap(hot_windows, image, threshold=threshold)
         heatmaps.append(heatmap)
 
@@ -49,7 +53,7 @@ def video_pipeline(clip, clf, threshold=1, search_params=PARAMS):
         last_hot_windows.append(keep)
         imgs.append(output)
 
-    return imgs, heatmaps
+    return imgs, heatmaps, feats, wins
 
 
 def draw_heat(image, heatmap, debug=False):
