@@ -56,7 +56,8 @@ I added about 200 hand labeled images. I also sneakily retrain on the full datas
 ####1. Describe how (and identify where in your code) you implemented a sliding window search. 
 
 I used the lecture code for sliding windows but added a few more windows to search, 
-basically so that there was lots of overlap and bigger windows at the top of the frame.
+basically so that there was lots of overlap and smaller windows at the top of the frame.
+Overall I used 206 windows each frame. In hindsight, I wish I had used bigger windows, since most of the training data is of full cars and my windows are too small to fit full cars.
 
 
 ![alt text][image3]
