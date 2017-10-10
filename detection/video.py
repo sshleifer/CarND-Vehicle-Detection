@@ -28,7 +28,7 @@ def video_pipeline(clip, clf, threshold=1, search_params=PARAMS):
         windows = make_many_windows(image)
         hot_windows = search_windows(image, windows, clf, **search_params)
         heatmap = get_heatmap(hot_windows, image, threshold=threshold)
-        heatmaps.append(draw_heat(image, heatmap))
+        heatmaps.append(heatmap)
 
         labels = label(heatmap)
         bboxes = get_bboxes(labels)
