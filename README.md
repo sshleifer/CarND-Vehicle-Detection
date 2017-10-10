@@ -12,7 +12,7 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 [image1]: ./examples/car_features.png
 [image1b]: ./examples/not_car_features.png
-[image3]: ./examples/sliding_windows.jpg
+[image3]: ./examples/my_many_windows.jpg
 [image4]: ./examples/test4.jpg
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
